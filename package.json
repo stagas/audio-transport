@@ -3,7 +3,7 @@
   "author": "stagas",
   "short": "stagas/audio-transport",
   "description": "Audio Transport control.",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "license": "MIT",
   "repository": {
     "type": "git",
@@ -79,10 +79,10 @@
   "dependencies": {
     "everyday-types": "^1.0.0",
     "icon-svg": "^3.0.2",
-    "immutable-map-set": "^0.0.1",
-    "scheduler-node": "^0.0.1",
-    "sigl": "^0.0.9",
-    "sigl-ui": "^0.0.2",
+    "immutable-map-set": "^1.0.0",
+    "scheduler-node": "^1.0.0",
+    "sigl": "^1.0.0",
+    "sigl-ui": "^1.0.0",
     "webaudio-tools": "^2.0.0"
   }
 }
