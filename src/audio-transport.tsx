@@ -81,38 +81,22 @@ export class AudioTransportElement extends HTMLElement {
   }))
 
   pause = $(this).with(({ $, audioContext, startTime, stop }) => (() => {
-    // TODO: fix these times
+    // TODO: fix pause/stop time offsets
     $.pausedTime = audioContext.currentTime - startTime
     stop()
     $.state.swap(AudioTransportState.Paused)
   }))
 
   start = $(this).with(({ $, schedulerNode }) => (async () => {
-    // const { currentTime } = audioContext
     if ($.state.isIdle) {
       $.state.push(AudioTransportState.Playing)
     } else {
       $.state.swap(AudioTransportState.Playing)
     }
-    // mainGain.gain.value = volume
-    // setParam(mainGain.gain, volume, 0)
-    // const sampleTime = 1 / audioContext.sampleRate
-    // $.startTime = ((Math.ceil(currentTime / sampleTime / 128) + 2) * 128) * sampleTime
-    // for (const node of nodes) {
-    //   // node.start($.startTime)
-    //   node.start()
-    //   // node.start()
-    // }
     $.startTime = await schedulerNode.start()
   }))
 
   stop = $(this).with(({ $, schedulerNode }) => (() => {
-    // setParam(mainGain.gain, 0)
-    // const { currentTime } = audioContext
-    // const stopTime = currentTime + 0.1
-    // for (const node of nodes) {
-    //   node.stop()
-    // }
     schedulerNode.stop()
     $.state.swap(AudioTransportState.Stopped)
   }))
@@ -156,7 +140,9 @@ export class AudioTransportElement extends HTMLElement {
 
     $.effect(({ peakVolume, vu, gradientCanvasCtx: ctx }) => {
       const pos = Math.min(1, (peakVolume ** 1.25) * 2)
-      const { data } = ctx.getImageData($.clipping ? 99 : pos * 99, 0, 1, 1) //, { colorSpace: 'display-p3' })
+      const x = Math.max(0, Math.min(99, $.clipping ? 99 : pos * 99))
+      if (!Number.isFinite(x)) return
+      const { data } = ctx.getImageData(x, 0, 1, 1)
       const color = `rgba(${data.subarray(0, 3)},${pos ** 1.5})`
       vu.style.setProperty('--color', color)
     })
